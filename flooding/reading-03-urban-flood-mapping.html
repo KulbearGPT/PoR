@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A beginner-friendly research reading on how satellites map urban floods, what the papers found, and how to plan a fair experiment.">
+  <meta name="theme-color" content="#fbfaf7">
+  <title>Can a satellite tell which streets are flooded? · Flooding Research Reading</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="../assets/course-home.css">
+  <link rel="stylesheet" href="assets/research-reading.css">
+</head>
+<body class="research-reading">
+  <a class="skip-link" href="#main">Skip to reading</a>
+  <div class="page">
+    <header class="site-header">
+      <a class="brand" href="./">AI <span>/</span> INTRO</a>
+      <nav aria-label="Course navigation">
+        <a href="./#readings">Readings</a>
+        <a href="kickoff/">Project kickoff</a>
+      </nav>
+    </header>
+
+    <main id="main" class="reading-column" tabindex="-1">
+      <article>
+        <header class="reading-hero">
+          <p class="eyebrow">Flooding · Research reading</p>
+          <h1>Can a satellite tell which streets are flooded?</h1>
+          <p class="dek">How researchers turn satellite images into flood maps, and how they find out whether those maps hold up in a new town.</p>
+          <p class="reading-meta">A guided reading for one or two weeks · No coding needed</p>
+        </header>
+
+        <nav class="reading-outline" aria-label="On this page">
+          <a href="#problem">The problem</a>
+          <a href="#methods">The clues</a>
+          <a href="#datasets">The datasets</a>
+          <a href="#papers">What papers found</a>
+          <a href="#experiment">A fair test</a>
+          <a href="#reading-plan">Reading plan</a>
+        </nav>
+
+        <section id="problem">
+          <h2>A flood map needs to show where the water went</h2>
+          <p>A river rises overnight. By morning, one road is under water and the road beside it is dry. A rescue team wants to know which route it can use. A satellite map can show the likely extent of the flood and help the team decide where to check first. One square on a satellite image can cover a mix of roofs, trees and road, so the map may miss a flooded street.</p>
+          <p>In this project we use images taken before and during a flood to mark the ground that is newly underwater. Researchers call this <strong>flood extent mapping</strong>. Forecasting asks where the water might go next. Our question is what we can tell from the images we already have.</p>
+          <details class="check">
+            <summary>Think it through · What if the satellite arrives a day late?</summary>
+            <p>The map can still show the water present when the image was taken. If some water has drained away, it may miss streets that flooded earlier. When you read a paper, check the dates of both the satellite image and the map used to check it.</p>
+          </details>
+        </section>
+
+        <section id="methods">
+          <h2>Four clues researchers use</h2>
+          <dl class="clue-list">
+            <div>
+              <dt>Look for visible water</dt>
+              <dd>An optical image is like a photograph. Researchers look for colours and shapes that resemble water. A clear view can make the edge of a flood easy to see. Storm clouds can hide the ground.</dd>
+            </div>
+            <div>
+              <dt>Compare radar brightness</dt>
+              <dd>Radar sends out a signal and measures the echo that comes back. It works at night and through clouds. Smooth water often sends the echo away, so a field that turns dark may have flooded. A building can send a strong echo back, even with water at its base. Shadows can also look dark.</dd>
+            </div>
+            <div>
+              <dt>Check whether radar echoes stay consistent</dt>
+              <dd>Buildings often give a similar radar pattern on two passes before a flood. Researchers can compare that pattern with a pair that includes a pass during the flood. This consistency is called <strong>coherence</strong>. A drop can be a clue that water reached a built-up area. Other changes can cause a drop too.</dd>
+            </div>
+            <div>
+              <dt>Look at where water can collect</dt>
+              <dd>A terrain map shows high and low ground. One clue is how far above its local drainage channel a spot sits, measured vertically. Researchers call this <strong>HAND</strong>. It may help near an overflowing river. A coarse terrain map can miss a blocked drain or an underpass.</dd>
+            </div>
+          </dl>
+          <p class="source-note">Look at a real example in the <a href="kickoff/#4">before-and-during radar slides</a>. Try slide 5 for coherence. <a href="https://www.mdpi.com/2072-4292/11/2/107">Chini et al., radar case study</a> · <a href="https://www.mdpi.com/2073-4441/15/23/4034">Tupas et al., terrain study</a></p>
+          <p>These clues can be turned into simple rules, such as “mark places that got much darker.” A model trained on labelled examples can also learn to combine clues. As you read, pay attention to what information the researchers gave the method and how they checked its maps.</p>
+        </section>
+
+        <section id="datasets">
+          <h2>Two datasets, two kinds of answer</h2>
+          <p>A <strong>dataset</strong> is a collection of images and reference maps. Each reference map labels what researchers believe is on the ground. Those labels are the answers a method is trained or tested against.</p>
+          <div class="dataset-pair">
+            <div>
+              <h3>Sen1Floods11</h3>
+              <p>Radar and optical images from 11 flood events. Its main labels mark water, which can include a river that was there before the flood. Use it to ask, “How well can a method find water?” Some studies also check newly flooded areas separately.</p>
+              <p class="source-note"><a href="https://github.com/cloudtostreet/Sen1Floods11">Explore the dataset and sample images</a></p>
+            </div>
+            <div>
+              <h3>UrbanSARFloods</h3>
+              <p>Before-and-during radar data from 18 flood events. Its labels distinguish no flood, flooded open ground, and flooded built-up areas. Use it to ask, “Can a method find flooding in towns, and does it work on a flood it has never seen?”</p>
+              <p class="source-note"><a href="https://arxiv.org/html/2406.04111#S3">Explore the dataset description</a></p>
+            </div>
+          </div>
+          <p>If half a town is pictured in the examples used to teach a model, testing it on the other half can tell you how it handles that town. To find out how it handles a new flood, keep every image from that flood out of training.</p>
+        </section>
+
+        <section id="papers">
+          <h2>What did the papers actually show?</h2>
+          <p>For each paper, write down what the researchers wanted to find, what information they used, and how they checked their maps.</p>
+
+          <div class="paper-list">
+            <div id="paper-sen">
+              <h3>Can examples improve a simple radar rule?</h3>
+              <p>Bonafilia and colleagues compared a “dark areas are likely water” rule with a model that learned from examples in Sen1Floods11. The model trained with water labels drawn from optical images did better at finding flood water and total water in their comparison. The simple rule did best for permanent water. Which method looked better depended on which kind of water they scored.</p>
+              <p>A later study on the same dataset got about 69% water overlap from radar and 84% from optical images on the standard test. Under storm clouds, the researchers may only have a useful radar image. Before choosing a method, ask which images will actually be available.</p>
+              <p class="source-note"><a href="https://openaccess.thecvf.com/content_CVPRW_2020/papers/w11/Bonafilia_Sen1Floods11_A_Georeferenced_Dataset_to_Train_and_Test_Deep_Learning_CVPRW_2020_paper.pdf">Bonafilia et al. (2020), abstract and Figure 1</a> · <a href="https://www.mdpi.com/2072-4292/18/21/3674">2026 radar and optical comparison</a></p>
+            </div>
+            <div id="paper-urban">
+              <h3>Does a good map of fields mean a good map of towns?</h3>
+              <p>Zhao and colleagues built UrbanSARFloods to check open ground and built-up areas separately. They tried several models and kept three flood events for testing. Some maps caught a lot of city flooding but also marked large dry areas as wet. The authors derived many city labels from a drop in radar coherence inside built-up areas. They also described smaller areas checked by hand against detailed aerial images.</p>
+              <p class="source-note"><a href="https://arxiv.org/html/2406.04111#S3.SS2">Zhao et al. (2024), label-making in §3.2</a> · <a href="https://arxiv.org/html/2406.04111#S4.SS2">Results in Tables 3–4</a></p>
+            </div>
+            <div id="paper-events">
+              <h3>How much does the result change from one flood to another?</h3>
+              <p>Lee and Li gave models radar brightness, coherence and a map of where settlements were. They report checking their predictions against maps labelled by experts. One model gave the following city-flood overlap scores on three test events. Even with the same method, the overlap varied widely.</p>
+              <figure class="event-figure">
+                <figcaption>City-flood map overlap (IoU) for one model on three events</figcaption>
+                <ul class="event-bars">
+                  <li><span>Weihui</span><span class="bar-track" aria-hidden="true"><span style="width:27%"></span></span><strong>27%</strong></li>
+                  <li><span>Jubba</span><span class="bar-track" aria-hidden="true"><span style="width:53%"></span></span><strong>53%</strong></li>
+                  <li><span>Nova Kakhovka</span><span class="bar-track" aria-hidden="true"><span style="width:48%"></span></span><strong>48%</strong></li>
+                </ul>
+              </figure>
+              <p>Another team trained flood maps on several public datasets and tried them on new disasters. The version trained on UrbanSARFloods did well on its flood score in Luzon and Lokoja and struggled in Hijikawa. That score combined open ground and built-up areas. Ask which places and which kinds of water a number covers before comparing it with another paper.</p>
+              <p class="source-note"><a href="https://arxiv.org/html/2604.26051#S5.SS2">Lee &amp; Li (2026), Table 5, scores rounded</a> · <a href="https://doi.org/10.1016/j.pdisas.2025.100507">San Jose et al. (2026), Tables 5–7</a></p>
+            </div>
+            <div id="paper-terrain">
+              <h3>Does a terrain map help everywhere?</h3>
+              <p>Tupas and colleagues used HAND to help decide whether a radar signal was likely to be flood water. The extra clue helped in most of their study locations, with smaller gains in some flat or built-up areas. A later study on Sen1Floods11 found small gains from HAND for the two models it compared. The idea has already been tried. A question for us is where terrain helps with <em>city</em> flooding on a new event.</p>
+              <p class="source-note"><a href="https://www.mdpi.com/2073-4441/15/23/4034#sec4-water-15-04034">Tupas et al. (2023), results and maps</a> · <a href="https://arxiv.org/html/2608.30895v1#S4.T1">Phunjanna et al. (2026), Table 1, preprint</a></p>
+            </div>
+          </div>
+
+          <details class="check">
+            <summary>How do you measure whether two flood maps agree?</summary>
+            <div class="overlap-example">
+              <div class="pixel-map" role="img" aria-label="Example grid with 6 correctly marked wet squares, 2 missed wet squares, 3 false alarms, and 14 correctly unmarked dry squares.">
+              <span></span><span></span><span></span><span></span><span></span>
+              <span></span><span class="hit">✓</span><span class="hit">✓</span><span class="miss">−</span><span></span>
+              <span></span><span class="false">+</span><span class="hit">✓</span><span class="hit">✓</span><span></span>
+              <span></span><span class="false">+</span><span class="hit">✓</span><span class="hit">✓</span><span class="miss">−</span>
+              <span></span><span></span><span class="false">+</span><span></span><span></span>
+              </div>
+              <div>
+                <p>Count the squares marked as flooded by either map. Here there are 11. The maps agree on 6 of those squares, so the overlap is <strong>6 out of 11, or about 55%</strong>. This measure is called <strong>IoU</strong>.</p>
+                <p class="pixel-legend"><span class="hit">✓</span> Correctly marked <span class="miss">−</span> Missed <span class="false">+</span> False alarm</p>
+                <p class="source-note">Made-up example. Dry squares that both maps agree on are left out of the overlap score.</p>
+              </div>
+            </div>
+          </details>
+        </section>
+
+        <section id="experiment">
+          <h2>How would we test the extra clues?</h2>
+          <p>Start with one question. <strong>When we map a flood in a town the model has never seen, does it help to add coherence, a terrain map, or both?</strong> The kickoff starts with three versions. Adding a version with terrain on its own alongside radar brightness lets us check whether terrain helps even without coherence.</p>
+          <table class="experiment-table">
+            <caption>Every version gets the same before-and-during radar brightness images</caption>
+            <thead>
+              <tr><th scope="col">Version</th><th scope="col">Also gets</th><th scope="col">What to compare</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">A</th><td>No extra clue</td><td>Our starting point</td></tr>
+              <tr><th scope="row">B</th><td>Coherence</td><td>B with A to test coherence</td></tr>
+              <tr><th scope="row">C</th><td>Coherence and terrain</td><td>C with B to see if terrain still helps with coherence</td></tr>
+              <tr><th scope="row">D</th><td>Terrain</td><td>D with A to test terrain by itself as an extra clue</td></tr>
+            </tbody>
+          </table>
+          <p>Use the same mapping method and the same training examples for all four versions. Test them on the same unseen floods. For each flood, look at city overlap and mark a few missed floods and false alarms on the map. One clue might help in a town next to an overflowing river and make little difference after heavy rain elsewhere.</p>
+          <div class="reference-check">
+            <h3>Who drew the answer map?</h3>
+            <p>Suppose the reference map labels a street as flooded because its radar coherence dropped. A method given that same clue might score well by repeating the rule. Where a detailed aerial image or an independent set of hand-drawn labels is available, we can use it to check whether the street was actually wet.</p>
+          </div>
+        </section>
+
+        <section id="reading-plan">
+          <h2>Your one- or two-week reading plan</h2>
+          <ol class="reading-steps">
+            <li><strong>First week · Read the two dataset papers.</strong> Read this page, then open the <a href="#paper-sen">Sen1Floods11</a> and <a href="#paper-urban">UrbanSARFloods</a> papers. Read each abstract, look at one figure and skim the conclusion. For each paper, write what went in, what map came out, and how one result was checked.</li>
+            <li><strong>Second week · Follow one clue.</strong> Pick either the <a href="#paper-events">city results</a> or the <a href="#paper-terrain">terrain study</a>. Find one figure or table and explain one result in your own words. Write what you think might change if the same method were tested in another town.</li>
+          </ol>
+          <div class="hand-in">
+            <h3>Bring one page of notes</h3>
+            <ul>
+              <li>Two short paper summaries and the figure or table you found most helpful.</li>
+              <li>One reason a map might look good on paper but miss flooding in town.</li>
+              <li>One comparison from A–D you would run first. Predict what might improve, what could get worse, and what evidence would change your mind.</li>
+            </ul>
+            <p class="source-note">If you have one week, finish the first step and bring your proposed comparison. If you have two, include what you learned from the follow-up paper.</p>
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <footer>
+      <a href="./#readings">← Back to course readings</a>
+      <a href="kickoff/">Project kickoff →</a>
+    </footer>
+  </div>
+</body>
+</html>

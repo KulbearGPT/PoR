@@ -256,7 +256,7 @@ x_B = x              # experiment B: + coherence</pre>
   <p class="eyebrow" style="color:#8fd3d8">This week</p>
   <h2 style="color:#fff">Three small things.</h2>
   <div class="row" style="margin-top:50px;gap:34px;align-items:flex-start">
-    <div class="grow fadeup d1"><p class="num" style="color:#8fd3d8;margin:0">1</p><p style="font-size:24px;font-weight:700;margin:12px 0 8px">Read two papers</p><p style="font-size:18px;margin:0;color:#c9d6d3">UrbanSARFloods (CVPRW 2024) and Sen1Floods11 (CVPRW 2020). Abstract, figures, conclusion.</p></div>
+    <div class="grow fadeup d1"><p class="num" style="color:#8fd3d8;margin:0">1</p><p style="font-size:24px;font-weight:700;margin:12px 0 8px">Read two papers</p><p style="font-size:18px;margin:0;color:#c9d6d3">Use the <a href="../reading-03-urban-flood-mapping.html#reading-plan" style="color:#a8e3e6">guided research reading</a> to work through the two dataset papers.</p></div>
     <div class="grow fadeup d2"><p class="num" style="color:#8fd3d8;margin:0">2</p><p style="font-size:24px;font-weight:700;margin:12px 0 8px">Open one tile</p><p style="font-size:18px;margin:0;color:#c9d6d3">In Colab, load one UrbanSARFloods test tile and plot its 8 layers side by side.</p></div>
     <div class="grow fadeup d3"><p class="num" style="color:#8fd3d8;margin:0">3</p><p style="font-size:24px;font-weight:700;margin:12px 0 8px">Bring one question</p><p style="font-size:18px;margin:0;color:#c9d6d3">Something in the data you don't understand yet. That is where research starts.</p></div>
   </div>
@@ -324,6 +324,7 @@ x_B = x              # experiment B: + coherence</pre>
   }
   window.addEventListener('resize',fit); fit();
   document.addEventListener('keydown',function(e){
+    if(e.key==='Enter' && e.target.closest('a[href]')) return;
     if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();show(cur+1)}
     else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();show(cur-1)}
     else if(e.key==='Home'){show(0)} else if(e.key==='End'){show(slides.length-1)}
