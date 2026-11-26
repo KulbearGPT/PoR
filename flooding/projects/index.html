@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Three Research Projects</title>
+<style>
+:root{
+  --paper:#fbfaf7;--ink:#20383f;--muted:#587078;--line:#d7dfd8;
+  --teal:#087f89;--pale:#e4f1ed;--orange:#ba5935;--sand:#f8ecdf;--green:#5b7d3a;
+  --sans:system-ui,-apple-system,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#1b2a2f;overflow:hidden;font-family:var(--sans);color:var(--ink)}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#deck{width:1280px;height:720px;position:relative;transform-origin:center center;flex:none}
+.slide{position:absolute;inset:0;background:var(--paper);padding:56px 72px;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility .45s;overflow:hidden}
+.slide.on{opacity:1;visibility:visible}
+.slide.dark{background:var(--ink);color:#f3f1ea}
+.eyebrow{font-size:15px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;margin:0 0 14px}
+h1{font-size:64px;line-height:1.06;margin:0 0 20px;letter-spacing:-1px}
+h2{font-size:44px;line-height:1.12;margin:0 0 12px;letter-spacing:-.5px}
+.lead{font-size:24px;line-height:1.45;color:var(--muted);margin:0}
+.dark .lead{color:#d3dfdc}
+.small{font-size:16px;color:var(--muted)}
+.c-orange{color:var(--orange)}.c-teal{color:var(--teal)}.c-green{color:var(--green)}
+.row{display:flex;gap:28px;align-items:center}
+.grow{flex:1;min-width:0}
+a{color:var(--teal);text-underline-offset:3px}
+.credit{position:absolute;right:10px;bottom:8px;font-size:11px;color:#fff;background:rgba(0,0,0,.45);padding:3px 8px;border-radius:6px;line-height:1.3;max-width:90%}
+.src{position:absolute;right:72px;bottom:22px;font-size:13px;color:var(--muted);text-align:right;max-width:900px}
+.dark .src{color:#9fb3ae}
+
+/* photos */
+.ph{position:relative;border-radius:14px;overflow:hidden;background:#1b2a2f}
+.ph img{display:block;width:100%;height:100%;object-fit:cover}
+.cap{font-size:18px;font-weight:700;margin:10px 0 2px}
+.capsub{font-size:15px;color:var(--muted);margin:0}
+.tagbox{position:absolute;top:12px;left:12px;background:#fff;color:var(--ink);font-weight:800;font-size:18px;padding:6px 12px;border-radius:9px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.tagbox.bad{color:var(--orange)}.tagbox.good{color:var(--teal)}
+
+/* full-bleed divider */
+.bleed{position:absolute;inset:0}
+.bleed img{width:100%;height:100%;object-fit:cover;display:block}
+.bleed::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,34,38,.92) 0%,rgba(20,34,38,.75) 38%,rgba(20,34,38,.05) 70%)}
+.over{position:relative;z-index:2;width:520px;height:100%;display:flex;flex-direction:column;justify-content:center}
+
+/* zoom crop of a large frame via background */
+.crop{background-repeat:no-repeat;border-radius:10px;position:relative}
+
+/* cards */
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+.num{font-size:64px;font-weight:800;line-height:1;letter-spacing:-2px}
+
+/* bar charts */
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:130px 1fr 70px;align-items:center;gap:10px;font-size:15px}
+.bar .t{height:18px;border-radius:4px;background:var(--green);transform-origin:left center}
+.bar .v{font-variant-numeric:tabular-nums;color:var(--muted)}
+.bar.rare .t{background:var(--orange)}.bar.rare{color:var(--orange);font-weight:700}
+
+/* progress + controls */
+#bar{position:fixed;left:0;bottom:0;height:4px;background:var(--orange);transition:width .35s}
+#count{position:fixed;right:18px;bottom:12px;color:#9fb3ae;font:13px var(--sans);letter-spacing:1px}
+#hint{position:fixed;left:18px;bottom:12px;color:#7f9792;font:13px var(--sans);transition:opacity 1s}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:64px;border:0;background:rgba(255,255,255,.06);color:#cfdcd8;font-size:26px;cursor:pointer;border-radius:10px}
+.navbtn:hover{background:rgba(255,255,255,.14)}
+#prev{left:10px}#next{right:10px}
+
+/* entrance animations */
+.on .fadeup{animation:fadeup .7s ease both}
+@keyframes fadeup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.d1{animation-delay:.12s!important}.d2{animation-delay:.3s!important}.d3{animation-delay:.48s!important}.d4{animation-delay:.66s!important}.d5{animation-delay:.84s!important}.d6{animation-delay:1.02s!important}
+.on .bar .t{animation:barx 1.1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes barx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.on .kb img{animation:kb 14s ease-out both}
+@keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.on *{animation:none!important}}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="deck">
+
+<!-- 1 TITLE -->
+<section class="slide dark">
+  <div class="row" style="height:100%;gap:44px">
+    <div style="width:520px">
+      <p class="eyebrow" style="color:#e0a183">AI Intro · Research projects</p>
+      <h1>Three projects.<br>One question.</h1>
+      <p class="lead">Each one asks: <b style="color:#fff">does the model still work in a place it has never seen?</b></p>
+      <p class="lead" style="margin-top:22px">Pick the one you would most enjoy explaining to a friend.</p>
+    </div>
+    <div class="grow" style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;height:560px">
+      <div class="ph fadeup d1" style="grid-column:1/3"><img src="https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200905_ValleyFire_lp-n-mobo-c/1599343021_%2B01800.jpg" alt="Wildfire smoke seen from a mountain-top camera" style="object-position:70% 40%"><span class="tagbox" style="color:var(--orange)">Wildfire smoke</span></div>
+      <div class="ph fadeup d2"><img src="https://storage.googleapis.com/public-datasets-lila/caltech-unzipped/cct_images/59cf46b7-23d2-11e8-a6a3-ec086b02610b.jpg" alt="Mountain lion on an infrared camera trap"><span class="tagbox" style="color:var(--green)">Wildlife cameras</span></div>
+      <div class="ph fadeup d3"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Flooding_around_the_Tejo_River%2C_Portugal%2C_by_Sentinel-1_ESA517687.jpg/1280px-Flooding_around_the_Tejo_River%2C_Portugal%2C_by_Sentinel-1_ESA517687.jpg" alt="Sentinel-1 radar image of flooding" style="object-position:45% 40%"><span class="tagbox" style="color:var(--teal)">Flood maps</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 THREAD -->
+<section class="slide">
+  <p class="eyebrow c-teal">What connects all three</p>
+  <h2>A model can score well for the <span class="c-orange">wrong reason.</span></h2>
+  <div class="row" style="margin-top:24px;gap:40px;align-items:flex-start">
+    <div class="ph fadeup d1" style="width:640px;height:467px">
+      <img src="https://storage.googleapis.com/public-datasets-lila/caltech-unzipped/cct_images/5a296504-23d2-11e8-a6a3-ec086b02610b.jpg" alt="A deer photographed by a camera trap">
+      <div class="fadeup d3" style="position:absolute;left:3%;top:12%;width:76%;height:62%;border:4px solid #3fd0d9;border-radius:10px"></div>
+      <div class="fadeup d3" style="position:absolute;left:3%;top:5%;background:#087f89;color:#fff;font-weight:700;padding:3px 10px;border-radius:6px;font-size:15px">deer</div>
+      <div class="fadeup d5" style="position:absolute;left:62%;top:4%;width:35%;height:28%;border:4px dashed #ffb48a;border-radius:10px"></div>
+      <div class="fadeup d5" style="position:absolute;left:1%;top:78%;width:98%;height:20%;border:4px dashed #ffb48a;border-radius:10px"></div>
+      <span class="credit">Caltech Camera Traps (LILA BC), CDLA-Permissive</span>
+    </div>
+    <div class="grow fadeup d4">
+      <p style="font-size:22px;margin:0 0 6px"><span style="display:inline-block;width:28px;height:14px;border:3px solid #3fd0d9;border-radius:4px;vertical-align:middle;margin-right:8px"></span>What we hope it uses</p>
+      <p style="font-size:22px;margin:0 0 26px"><span style="display:inline-block;width:28px;height:14px;border:3px dashed #e08a5c;border-radius:4px;vertical-align:middle;margin-right:8px"></span>What it might really use</p>
+      <p style="font-size:28px;line-height:1.35;margin:0 0 18px;font-weight:700">Flowers. Grass.<br>The camera's view.</p>
+      <p class="lead" style="font-size:21px">You met this in the course. Now test it on a real problem, with real data.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 RECIPE -->
+<section class="slide">
+  <p class="eyebrow c-teal">Every project follows the same recipe</p>
+  <h2>Four steps. You already know most of them.</h2>
+  <div class="row" style="margin-top:48px;gap:22px;align-items:stretch">
+    <div class="card fadeup d1 grow"><div class="num c-teal">1</div><p style="font-size:25px;font-weight:700;margin:16px 0 8px">Reproduce</p><p class="small" style="font-size:18px;margin:0">Train a model from a published paper on public data.</p></div>
+    <div class="card fadeup d2 grow"><div class="num c-teal">2</div><p style="font-size:25px;font-weight:700;margin:16px 0 8px">Move it</p><p class="small" style="font-size:18px;margin:0">Test it somewhere new. Measure what breaks.</p></div>
+    <div class="card fadeup d3 grow"><div class="num c-orange">3</div><p style="font-size:25px;font-weight:700;margin:16px 0 8px">Ask why</p><p class="small" style="font-size:18px;margin:0">Shortcut tests: change one thing, watch the result.</p></div>
+    <div class="card fadeup d4 grow"><div class="num c-orange">4</div><p style="font-size:25px;font-weight:700;margin:16px 0 8px">Fix it</p><p class="small" style="font-size:18px;margin:0">Try your own idea. Several seeds. Fair comparison.</p></div>
+  </div>
+  <p class="lead fadeup d5" style="margin-top:36px;font-size:21px">All data is public and already labeled. Everything runs on free Google Colab.</p>
+</section>
+
+<!-- 4 SMOKE DIVIDER -->
+<section class="slide dark" style="padding:0">
+  <div class="bleed kb"><img src="https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200905_ValleyFire_lp-n-mobo-c/1599342421_%2B01200.jpg" alt="Valley Fire smoke, 20 minutes after it first appeared" style="object-position:70% 50%"></div>
+  <div class="over" style="padding-left:72px">
+    <p class="eyebrow" style="color:#e0a183">Project 1</p>
+    <h1 style="font-size:58px">Catch wildfire smoke early</h1>
+    <p class="lead">Mountain-top cameras watch for the first puff of smoke. Can AI raise the alarm within minutes?</p>
+  </div>
+  <span class="credit">Valley Fire, 5 Sep 2020, Lyons Peak camera · FIgLib, HPWREN (hpwren.ucsd.edu)</span>
+</section>
+
+<!-- 5 MINUTES -->
+<section class="slide">
+  <p class="eyebrow c-orange">Why it matters</p>
+  <h2>Same fire, same camera, a few minutes apart.</h2>
+  <div class="row" style="margin-top:26px;gap:12px;align-items:flex-start" id="strip"></div>
+  <div class="row fadeup d6" style="margin-top:26px;gap:24px">
+    <p style="font-size:26px;font-weight:700;margin:0;line-height:1.3;width:560px">Fire crews don't count accuracy.<br>They count <span class="c-orange">minutes.</span></p>
+    <p class="lead grow" style="font-size:20px">So we score a detector by <b>minutes to alarm</b> and <b>false alarms per day</b>, not by a single accuracy number.</p>
+  </div>
+  <p class="src">Zoomed crops of real FIgLib frames, Valley Fire 2020 · HPWREN (hpwren.ucsd.edu)</p>
+</section>
+
+<!-- 6 TWIST -->
+<section class="slide">
+  <p class="eyebrow c-orange">The twist</p>
+  <h2>Trained on some cameras. Tested on cameras it has never seen.</h2>
+  <div class="row" style="margin-top:22px;gap:22px;align-items:stretch">
+    <div class="grow fadeup d1">
+      <div class="ph" style="height:290px"><img src="https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200905_ValleyFire_lp-n-mobo-c/1599341821_%2B00600.jpg" alt="Training camera view"><span class="credit">FIgLib · HPWREN</span></div>
+      <p class="cap"><span class="c-orange">Train</span> on FIgLib cameras, Southern California</p>
+      <p class="capsub">About 25,000 labeled images, in time order</p>
+    </div>
+    <div class="fadeup d2" style="font-size:54px;align-self:center;color:var(--muted)">→</div>
+    <div class="grow fadeup d3">
+      <div class="ph" style="height:290px"><img src="https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200806_SpringsFire_lp-w-mobo-c/1596764888_%2B00901.jpg" alt="A different camera with sun glare and haze"><span class="credit">FIgLib · HPWREN</span></div>
+      <p class="cap"><span class="c-teal">Test</span> on a camera left out of training</p>
+      <p class="capsub">Sun glare, haze, a different view. Same fire season, new eyes.</p>
+    </div>
+  </div>
+  <div class="row fadeup d5" style="margin-top:18px;gap:16px">
+    <span style="background:var(--pale);color:var(--teal);font-weight:700;padding:6px 14px;border-radius:999px;font-size:15px;white-space:nowrap">Then: France</span>
+    <p style="font-size:20px;margin:0;line-height:1.4"><b>Pyro-SDIS</b>: 12,378 images from French fire-service cameras, including 1,634 smoke-free frames that fooled the current system. Free on Hugging Face (Apache-2.0). <b>How much later does the alarm go off?</b></p>
+  </div>
+</section>
+
+<!-- 7 SHORTCUT TESTS -->
+<section class="slide">
+  <p class="eyebrow c-orange">What you would do</p>
+  <h2>Is it seeing smoke, or clouds and sky?</h2>
+  <div class="row" style="margin-top:18px;gap:16px;align-items:flex-start">
+    <div class="grow fadeup d1"><div class="ph" style="height:240px"><img src="https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200905_ValleyFire_lp-n-mobo-c/1599341521_%2B00300.jpg" alt="Frame with thin smoke column"><div style="position:absolute;left:82%;top:24%;width:12%;height:30%;border:3px solid #ffb48a;border-radius:50%"></div></div><p class="cap">Original (+5 min)</p><p class="capsub">a thin smoke column, circled</p></div>
+    <div class="grow fadeup d2"><div class="ph" style="height:240px"><img src="https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200905_ValleyFire_lp-n-mobo-c/1599341521_%2B00300.jpg" alt="Same frame with the sky covered"><div style="position:absolute;left:0;top:0;width:100%;height:46%;background:#7a8a87;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;font-weight:700">sky covered</div></div><p class="cap">Hide the sky</p><p class="capsub c-orange">Does the alarm still go off?</p></div>
+    <div class="grow fadeup d3"><div class="ph" style="height:240px"><img src="https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200905_ValleyFire_lp-n-mobo-c/1599340621_-00600.jpg" alt="Same camera ten minutes before the fire"></div><p class="cap">Same camera, no fire (−10 min)</p><p class="capsub c-orange">Clouds and a dark spot on the lens. False alarm?</p></div>
+  </div>
+  <div class="row fadeup d5" style="margin-top:18px;gap:16px">
+    <span style="background:var(--sand);color:var(--orange);font-weight:700;padding:6px 14px;border-radius:999px;font-size:15px">Your idea</span>
+    <div class="crop" data-f="1599341821_%2B00600.jpg" style="width:200px;height:112px"></div>
+    <span style="font-size:32px;font-weight:700">−</span>
+    <div class="crop" data-f="1599341101_-00120.jpg" style="width:200px;height:112px"></div>
+    <span style="font-size:32px;font-weight:700">=</span>
+    <div style="width:200px;height:112px;border-radius:10px;overflow:hidden;position:relative;isolation:isolate;filter:grayscale(1) brightness(6)">
+      <div class="crop" data-f="1599341101_-00120.jpg" style="position:absolute;inset:0;border-radius:0"></div>
+      <div class="crop" data-f="1599341821_%2B00600.jpg" style="position:absolute;inset:0;border-radius:0;mix-blend-mode:difference"></div>
+    </div>
+    <p style="font-size:19px;margin:0;line-height:1.35" class="grow"><b>+10 min</b> minus <b>−2 min</b>: show the model only <b>what changed</b>.</p>
+  </div>
+</section>
+
+<!-- 8 SMOKE WHY -->
+<section class="slide dark" style="padding:0">
+  <div class="bleed"><img src="https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200905_ValleyFire_lp-n-mobo-c/1599343021_%2B01800.jpg" alt="Large smoke plume 30 minutes after first appearance" style="object-position:75% 45%"></div>
+  <div class="over" style="padding-left:72px;width:600px">
+    <p class="eyebrow" style="color:#e0a183">Why this project is exciting</p>
+    <h2 style="color:#fff">Real stakes. A clear score. A great demo.</h2>
+    <p class="lead fadeup d1" style="margin-top:20px"><b style="color:#fff">Real impact.</b> Canada relies more and more on cameras to spot new fires.</p>
+    <p class="lead fadeup d2" style="margin-top:14px"><b style="color:#fff">A score anyone gets.</b> “Our alarm is 3 minutes earlier” needs no explanation.</p>
+    <p class="lead fadeup d3" style="margin-top:14px"><b style="color:#fff">Looks great on stage.</b> A time-lapse like this one, with your model's alarm on top.</p>
+    <p class="lead fadeup d4" style="margin-top:14px;font-size:19px">Our lab also has a wildfire forecasting project, so you have people to ask.</p>
+  </div>
+  <span class="credit">Valley Fire, +30 min · FIgLib, HPWREN (hpwren.ucsd.edu)</span>
+</section>
+
+<!-- 9 CAMERA DIVIDER -->
+<section class="slide dark" style="padding:0">
+  <div class="bleed kb"><img src="https://storage.googleapis.com/public-datasets-lila/caltech-unzipped/cct_images/59cf46b7-23d2-11e8-a6a3-ec086b02610b.jpg" alt="Mountain lion captured at night by an infrared camera trap" style="object-position:60% 50%"></div>
+  <div class="over" style="padding-left:72px">
+    <p class="eyebrow" style="color:#b9d19f">Project 2</p>
+    <h1 style="font-size:58px">Find the rare animals</h1>
+    <p class="lead">Motion-triggered cameras take millions of photos. Can AI spot the animals that matter most?</p>
+  </div>
+  <span class="credit">Mountain lion, Caltech Camera Traps (LILA BC), CDLA-Permissive</span>
+</section>
+
+<!-- 10 LONG TAIL -->
+<section class="slide">
+  <p class="eyebrow c-green">The problem</p>
+  <h2>Common animals are easy. The rare ones <span class="c-green">matter.</span></h2>
+  <div class="row" style="margin-top:12px;gap:36px;align-items:flex-start">
+    <div class="bars grow" id="tail"></div>
+    <div style="width:330px">
+      <div class="ph fadeup d3" style="height:200px"><img src="https://storage.googleapis.com/public-datasets-lila/caltech-unzipped/cct_images/59cf46b7-23d2-11e8-a6a3-ec086b02610b.jpg" alt="Mountain lion"><span class="tagbox bad">44 boxes</span></div>
+      <p class="cap fadeup d3">Mountain lion</p>
+      <p class="capsub fadeup d3" style="margin-bottom:16px">vs 12,134 for opossum</p>
+      <p class="fadeup d5" style="font-size:19px;line-height:1.4;margin:0">On another big camera dataset (NACTI), a model hits <b>99.4%</b>, yet <b class="c-orange">rare species collapse</b> when it is moved to new cameras.</p>
+    </div>
+  </div>
+  <p class="src">Bounding-box counts, Caltech Camera Traps (≈63,000 images, 140 cameras) · NACTI: Liu &amp; Burghardt, arXiv 2026</p>
+</section>
+
+<!-- 11 EMPTY FRAME -->
+<section class="slide">
+  <p class="eyebrow c-green">What you would do</p>
+  <h2>Does it know the animal, or the place?</h2>
+  <div class="row" style="margin-top:22px;gap:20px;align-items:flex-start">
+    <div class="grow fadeup d1"><div class="ph" style="height:400px"><img src="https://storage.googleapis.com/public-datasets-lila/caltech-unzipped/cct_images/59595173-23d2-11e8-a6a3-ec086b02610b.jpg" alt="Deer at camera 70"><span class="tagbox good">“deer” ✓</span></div><p class="cap">Camera 70, with a deer</p></div>
+    <div class="grow fadeup d3"><div class="ph" style="height:400px"><img src="https://storage.googleapis.com/public-datasets-lila/caltech-unzipped/cct_images/59563845-23d2-11e8-a6a3-ec086b02610b.jpg" alt="Same camera, empty"><span class="tagbox bad">“deer” ?!</span></div><p class="cap">Same camera, empty</p></div>
+  </div>
+  <p class="lead fadeup d5" style="font-size:21px;margin-top:6px">If it still says “deer” on the empty photo, it learned the <b>place</b>, not the animal.</p>
+  <p class="src">Caltech Camera Traps (LILA BC), CDLA-Permissive · Same test idea: PanAf-FGBG, CVPR 2025</p>
+</section>
+
+<!-- 12 LABEL BUDGET -->
+<section class="slide">
+  <p class="eyebrow c-green">Your own idea to test</p>
+  <h2>Every camera looks different. You can label 10 photos.<br>Which 10?</h2>
+  <div id="thumbs" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px"></div>
+  <div class="row fadeup d5" style="margin-top:16px;gap:14px;align-items:stretch">
+    <div class="card grow" style="padding:14px 18px"><b style="font-size:20px">Random</b><p class="capsub">the simple baseline</p></div>
+    <div class="card grow" style="padding:14px 18px"><b style="font-size:20px">Least sure</b><p class="capsub">where the model is confused</p></div>
+    <div class="card grow" style="padding:14px 18px"><b style="font-size:20px">Most cameras</b><p class="capsub">spread across as many places as possible</p></div>
+  </div>
+  <p class="src">Eight different cameras, Caltech Camera Traps (LILA BC), CDLA-Permissive</p>
+</section>
+
+<!-- 13 CAMERA WHY -->
+<section class="slide">
+  <p class="eyebrow c-green">Why this project is exciting</p>
+  <h2>Help scientists protect animals they can't watch themselves.</h2>
+  <div class="row" style="margin-top:22px;gap:34px;align-items:flex-start">
+    <div class="ph fadeup d1" style="width:600px;height:450px"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Wolverine_-_Trail_Camera_Picture_%285489849822%29.jpg/1280px-Wolverine_-_Trail_Camera_Picture_%285489849822%29.jpg" alt="Wolverine on a trail camera in Glacier National Park"><span class="credit">Wolverine on a trail camera, Glacier National Park (NPS), public domain</span></div>
+    <div class="grow">
+      <p class="fadeup d2" style="font-size:22px;line-height:1.4;margin:0 0 18px"><b>Conservation.</b> Rare animals like this wolverine are exactly the ones models miss.</p>
+      <p class="fadeup d3" style="font-size:22px;line-height:1.4;margin:0 0 18px"><b>Millions of photos.</b> In Caltech Camera Traps, about 70% of photos are empty. Nobody can sort them by hand.</p>
+      <p class="fadeup d4" style="font-size:22px;line-height:1.4;margin:0 0 18px"><b>Fast to start.</b> Free models such as SpeciesNet already know about 2,500 species.</p>
+      <p class="fadeup d5 small" style="font-size:18px;margin:0">Glacier National Park borders Alberta's Waterton Lakes. One key study used Parks Canada images.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 14 FLOOD DIVIDER -->
+<section class="slide dark" style="padding:0">
+  <div class="bleed kb"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Flooding_around_the_Tejo_River%2C_Portugal%2C_by_Sentinel-1_ESA517687.jpg/1280px-Flooding_around_the_Tejo_River%2C_Portugal%2C_by_Sentinel-1_ESA517687.jpg" alt="Sentinel-1 radar change image: flooding in red along the Tejo River" style="object-position:60% 40%"></div>
+  <div class="over" style="padding-left:72px">
+    <p class="eyebrow" style="color:#8fd3d8">Project 3</p>
+    <h1 style="font-size:58px">Map floods from space</h1>
+    <p class="lead">Radar satellites see through clouds, day and night. Here, red is new flood water along a river in Portugal.</p>
+  </div>
+  <span class="credit">Tejo River flooding, Copernicus Sentinel-1 · ESA, via Wikimedia Commons</span>
+</section>
+
+<!-- 15 BLIND SPOTS -->
+<section class="slide">
+  <p class="eyebrow c-teal">The problem</p>
+  <h2>Great over farmland. Nearly <span class="c-orange">blind</span> in towns and forests.</h2>
+  <div class="row" style="margin-top:18px;gap:34px;align-items:flex-start">
+    <div style="width:520px">
+      <div class="bars" style="gap:22px;margin-top:10px">
+        <div class="bar" style="grid-template-columns:150px 1fr 70px;font-size:20px;font-weight:700"><span>Cropland</span><div class="t" style="width:100%;height:36px;background:var(--teal)"></div><span class="c-teal" style="font-size:24px">52%</span></div>
+        <div class="bar" style="grid-template-columns:150px 1fr 70px;font-size:20px;font-weight:700"><span>Tree cover</span><div><div class="t" style="width:7.7%;height:36px;background:var(--orange)"></div></div><span class="c-orange" style="font-size:24px">~4%</span></div>
+        <div class="bar" style="grid-template-columns:150px 1fr 70px;font-size:20px;font-weight:700"><span>Towns</span><div><div class="t" style="width:7.7%;height:36px;background:var(--orange)"></div></div><span class="c-orange" style="font-size:24px">~4%</span></div>
+      </div>
+      <p class="fadeup d4" style="font-size:19px;line-height:1.45;margin:26px 0 0">Overlap between predicted and true flood (IoU) for a big pretrained model on <b>19 floods it had never seen</b>.</p>
+    </div>
+    <div class="grow fadeup d2">
+      <div class="ph" style="height:380px"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/The_Impact_of_the_Floods_South_of_Valencia_through_the_eyes_of_Copernicus_Sentinel-2_%28Copernicus_2024-11-02%29.png/1280px-The_Impact_of_the_Floods_South_of_Valencia_through_the_eyes_of_Copernicus_Sentinel-2_%28Copernicus_2024-11-02%29.png" alt="Towns south of Valencia before and after the 2024 floods" style="object-fit:contain;background:#0e1a1d"><span class="credit">Valencia, before/after, Copernicus Sentinel-2 · EU, via Wikimedia Commons</span></div>
+      <p class="capsub" style="margin-top:8px">Towns south of Valencia, before and after the October 2024 floods. <b class="c-orange">Towns are where people live.</b></p>
+    </div>
+  </div>
+  <p class="src">IoU values: Kolluru et al., arXiv 2026 (Prithvi-EO-2.0, 19 out-of-distribution floods, 2017–2025)</p>
+</section>
+
+<!-- 16 TERRAIN IDEA -->
+<section class="slide">
+  <p class="eyebrow c-teal">Your own idea to test</p>
+  <h2>Water flows downhill. Can the model use that?</h2>
+  <div class="row" style="margin-top:20px;gap:30px;align-items:flex-start">
+    <div class="ph fadeup d1" style="width:640px;height:430px"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Flooding_caused_by_Cyclone_Gabrielle_near_Napier%2C_New_Zealand_-_14_February_2023_%2852690129056%29.jpg/1280px-Flooding_caused_by_Cyclone_Gabrielle_near_Napier%2C_New_Zealand_-_14_February_2023_%2852690129056%29.jpg" alt="Satellite view of flooding around a river valley near Napier"><span class="credit">Napier, NZ, 14 Feb 2023 · Pierre Markuse, CC BY 2.0 (modified Copernicus Sentinel data)</span></div>
+    <div class="grow">
+      <p class="fadeup d2" style="font-size:23px;line-height:1.4;margin:0 0 18px">Look where the water sits: <b>in the low ground along the rivers.</b></p>
+      <p class="fadeup d3" style="font-size:23px;line-height:1.4;margin:0 0 18px">Give the model one extra free map: <b>how high each spot is above the nearest river.</b></p>
+      <p class="fadeup d4 c-orange" style="font-size:23px;line-height:1.4;margin:0;font-weight:700">Does that fix the blind spots in forests and towns?</p>
+    </div>
+  </div>
+</section>
+
+<!-- 17 FLOOD WHY -->
+<section class="slide">
+  <p class="eyebrow c-teal">Why this project is exciting</p>
+  <h2>A map rescue teams could use the same day.</h2>
+  <div class="row" style="margin-top:20px;gap:16px;align-items:flex-start">
+    <div class="grow fadeup d1"><div class="ph" style="height:300px"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Centre_Street_Bridge_Calgary_Flood_2013.jpg" alt="Centre Street Bridge, Calgary, during the 2013 flood"><span class="credit">Ryan L. C. Quan, CC BY-SA 3.0</span></div><p class="cap">Calgary, June 2013</p></div>
+    <div class="grow fadeup d2"><div class="ph" style="height:300px"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/1600_Macleod_Trail_High_River_abandoned.jpg/1280px-1600_Macleod_Trail_High_River_abandoned.jpg" alt="Homes in High River abandoned after the 2013 flood"><span class="credit">Mpeel, CC BY-SA 4.0</span></div><p class="cap">High River: homes on the flood plain, abandoned after 2013</p></div>
+  </div>
+  <div class="row fadeup d4" style="margin-top:18px;gap:30px;font-size:20px;line-height:1.4">
+    <p class="grow" style="margin:0"><b>Close to home.</b> Alberta knows what floods cost.</p>
+    <p class="grow" style="margin:0"><b>Works in bad weather.</b> Radar sees through storm clouds.</p>
+    <p class="grow" style="margin:0"><b>Free global data.</b> Sen1Floods11: 11 floods, 6 continents.</p>
+  </div>
+</section>
+
+<!-- 18 COMPARE -->
+<section class="slide">
+  <p class="eyebrow c-teal">Side by side</p>
+  <h2>Which one would you want to explain?</h2>
+  <div class="row" style="margin-top:24px;gap:20px;align-items:stretch">
+    <div class="card fadeup d1 grow" style="padding:0;overflow:hidden"><div class="ph" style="height:150px;border-radius:0"><img src="https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200905_ValleyFire_lp-n-mobo-c/1599343021_%2B01800.jpg" alt="" style="object-position:75% 45%"></div><div style="padding:16px 20px">
+      <p style="font-size:26px;font-weight:800;margin:0 0 12px" class="c-orange">Wildfire smoke</p>
+      <p class="small" style="margin:0;font-weight:700;letter-spacing:1px;font-size:13px">YOU WORK WITH</p><p style="font-size:19px;margin:2px 0 10px">camera photos over time</p>
+      <p class="small" style="margin:0;font-weight:700;letter-spacing:1px;font-size:13px">YOUR SCORE</p><p style="font-size:19px;margin:2px 0 10px">minutes to alarm</p>
+      <p class="small" style="margin:0;font-weight:700;letter-spacing:1px;font-size:13px">YOU WILL LEARN</p><p style="font-size:19px;margin:2px 0 0">object detection, video</p></div></div>
+    <div class="card fadeup d2 grow" style="padding:0;overflow:hidden"><div class="ph" style="height:150px;border-radius:0"><img src="https://storage.googleapis.com/public-datasets-lila/caltech-unzipped/cct_images/5a296504-23d2-11e8-a6a3-ec086b02610b.jpg" alt="" style="object-position:30% 40%"></div><div style="padding:16px 20px">
+      <p style="font-size:26px;font-weight:800;margin:0 0 12px" class="c-green">Wildlife cameras</p>
+      <p class="small" style="margin:0;font-weight:700;letter-spacing:1px;font-size:13px">YOU WORK WITH</p><p style="font-size:19px;margin:2px 0 10px">animal photos from many places</p>
+      <p class="small" style="margin:0;font-weight:700;letter-spacing:1px;font-size:13px">YOUR SCORE</p><p style="font-size:19px;margin:2px 0 10px">accuracy on rare species</p>
+      <p class="small" style="margin:0;font-weight:700;letter-spacing:1px;font-size:13px">YOU WILL LEARN</p><p style="font-size:19px;margin:2px 0 0">pretrained models, imbalance</p></div></div>
+    <div class="card fadeup d3 grow" style="padding:0;overflow:hidden"><div class="ph" style="height:150px;border-radius:0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Flooding_around_the_Tejo_River%2C_Portugal%2C_by_Sentinel-1_ESA517687.jpg/1280px-Flooding_around_the_Tejo_River%2C_Portugal%2C_by_Sentinel-1_ESA517687.jpg" alt="" style="object-position:50% 40%"></div><div style="padding:16px 20px">
+      <p style="font-size:26px;font-weight:800;margin:0 0 12px" class="c-teal">Flood maps</p>
+      <p class="small" style="margin:0;font-weight:700;letter-spacing:1px;font-size:13px">YOU WORK WITH</p><p style="font-size:19px;margin:2px 0 10px">radar satellite images</p>
+      <p class="small" style="margin:0;font-weight:700;letter-spacing:1px;font-size:13px">YOUR SCORE</p><p style="font-size:19px;margin:2px 0 10px">map overlap, by land type</p>
+      <p class="small" style="margin:0;font-weight:700;letter-spacing:1px;font-size:13px">YOU WILL LEARN</p><p style="font-size:19px;margin:2px 0 0">segmentation, satellite data</p></div></div>
+  </div>
+</section>
+
+<!-- 19 NEXT -->
+<section class="slide dark">
+  <p class="eyebrow" style="color:#e0a183">Before we meet again</p>
+  <h2 style="color:#fff">Your homework is to choose.</h2>
+  <div class="row" style="margin-top:60px;gap:36px;align-items:flex-start">
+    <div class="grow fadeup d1"><p class="num" style="color:#e0a183;margin:0">1</p><p style="font-size:25px;font-weight:700;margin:14px 0 8px">Skim 2 papers each</p><p style="font-size:19px;margin:0;color:#c9d6d3">Abstract, figures, conclusion. Skip the equations.</p></div>
+    <div class="grow fadeup d2"><p class="num" style="color:#b9d19f;margin:0">2</p><p style="font-size:25px;font-weight:700;margin:14px 0 8px">Write one paragraph</p><p style="font-size:19px;margin:0;color:#c9d6d3">For your favourite: the question, your first experiment, a result that would surprise you.</p></div>
+    <div class="grow fadeup d3"><p class="num" style="color:#8fd3d8;margin:0">3</p><p style="font-size:25px;font-weight:700;margin:14px 0 8px">Rank all three</p><p style="font-size:19px;margin:0;color:#c9d6d3">One reason each. “None of these” is a fine answer too.</p></div>
+  </div>
+</section>
+
+<!-- 20 READING -->
+<section class="slide">
+  <p class="eyebrow c-teal">Start reading here</p>
+  <h2 style="font-size:40px">Papers per project</h2>
+  <div class="row" style="margin-top:26px;gap:26px;align-items:stretch;font-size:17px;line-height:1.45">
+    <div class="grow"><p class="c-orange" style="font-weight:800;font-size:20px;margin:0 0 10px">Wildfire smoke</p>
+      <p style="margin:0 0 12px"><a href="https://doi.org/10.3390/rs14041007">FIgLib &amp; SmokeyNet</a><br><span class="small">Remote Sensing 2022</span></p>
+      <p style="margin:0 0 12px"><a href="https://doi.org/10.3390/s26196020">Detecting Wildfire Smoke Onset from Fixed View Camera Networks</a><br><span class="small">Sensors 2026</span></p>
+      <p style="margin:0"><a href="https://huggingface.co/datasets/pyronear/pyro-sdis">Pyro-SDIS dataset</a><br><span class="small">Hugging Face, Apache-2.0 (test set)</span></p></div>
+    <div class="grow"><p class="c-green" style="font-weight:800;font-size:20px;margin:0 0 10px">Wildlife cameras</p>
+      <p style="margin:0 0 12px"><a href="https://doi.org/10.1007/978-3-030-01270-0_28">Recognition in Terra Incognita</a><br><span class="small">ECCV 2018 (Caltech Camera Traps)</span></p>
+      <p style="margin:0 0 12px"><a href="https://doi.org/10.48550/arxiv.2607.18033">Benchmarking NACTI Species Recognition in Long-Tailed Regimes</a><br><span class="small">arXiv 2026</span></p>
+      <p style="margin:0"><a href="https://doi.org/10.1109/cvpr52734.2025.00511">PanAf-FGBG</a><br><span class="small">CVPR 2025</span></p></div>
+    <div class="grow"><p class="c-teal" style="font-weight:800;font-size:20px;margin:0 0 10px">Flood maps</p>
+      <p style="margin:0 0 12px"><a href="https://doi.org/10.1109/cvprw50498.2020.00113">Sen1Floods11</a><br><span class="small">CVPR Workshops 2020</span></p>
+      <p style="margin:0 0 12px"><a href="https://doi.org/10.48550/arxiv.2606.07780">Land cover and flood type govern the detection limits of satellite-based flood mapping</a><br><span class="small">arXiv 2026</span></p>
+      <p style="margin:0"><a href="https://doi.org/10.1111/tgis.70468">DEM-derived hydrological priors for SAR flood segmentation</a><br><span class="small">Transactions in GIS 2026</span></p></div>
+  </div>
+</section>
+
+<!-- 21 CREDITS -->
+<section class="slide">
+  <p class="eyebrow c-teal">Image credits</p>
+  <div style="columns:2;column-gap:40px;font-size:14px;line-height:1.5;margin-top:10px">
+    <p style="margin:0 0 10px"><b>Wildfire camera frames:</b> HPWREN Fire Ignition images Library (FIgLib): Valley Fire, Lyons Peak north camera, 5 Sep 2020; Springs Fire, Lyons Peak west camera, 6 Aug 2020. Credit: <a href="https://hpwren.ucsd.edu/">hpwren.ucsd.edu</a>.</p>
+    <p style="margin:0 0 10px"><b>Camera-trap photos:</b> Caltech Camera Traps (Beery, Van Horn &amp; Perona, ECCV 2018), hosted by <a href="https://lila.science/datasets/caltech-camera-traps">LILA BC</a>, Community Data License Agreement (permissive).</p>
+        <p style="margin:0 0 10px"><b>Wolverine:</b> “Wolverine – Trail Camera Picture”, Glacier National Park (NPS), <a href="https://commons.wikimedia.org/wiki/File:Wolverine_-_Trail_Camera_Picture_(5489849822).jpg">Wikimedia Commons</a>, public domain.</p>
+    <p style="margin:0 0 10px"><b>Tejo River flooding:</b> Copernicus Sentinel-1, European Space Agency, <a href="https://commons.wikimedia.org/wiki/File:Flooding_around_the_Tejo_River,_Portugal,_by_Sentinel-1_ESA517687.jpg">Wikimedia Commons</a>.</p>
+    <p style="margin:0 0 10px"><b>Valencia floods:</b> Copernicus Sentinel-2, European Union, <a href="https://commons.wikimedia.org/wiki/File:The_Impact_of_the_Floods_South_of_Valencia_through_the_eyes_of_Copernicus_Sentinel-2_(Copernicus_2024-11-02).png">Wikimedia Commons</a>.</p>
+    <p style="margin:0 0 10px"><b>Napier flooding:</b> Pierre Markuse, contains modified Copernicus Sentinel data, <a href="https://commons.wikimedia.org/wiki/File:Flooding_caused_by_Cyclone_Gabrielle_near_Napier,_New_Zealand_-_14_February_2023_(52690129056).jpg">Wikimedia Commons</a>, CC BY 2.0.</p>
+    <p style="margin:0 0 10px"><b>Calgary 2013:</b> “Centre Street Bridge Calgary Flood 2013”, Ryan L. C. Quan, <a href="https://commons.wikimedia.org/wiki/File:Centre_Street_Bridge_Calgary_Flood_2013.jpg">Wikimedia Commons</a>, CC BY-SA 3.0.</p>
+    <p style="margin:0 0 10px"><b>High River:</b> “1600 Macleod Trail High River abandoned”, Mpeel, <a href="https://commons.wikimedia.org/wiki/File:1600_Macleod_Trail_High_River_abandoned.jpg">Wikimedia Commons</a>, CC BY-SA 4.0.</p>
+    <p style="margin:0 0 10px">Images are loaded from their original hosts, so this page needs an internet connection. Some photos are cropped or zoomed; the “what changed” panel is a pixel difference of two FIgLib frames.</p>
+  </div>
+</section>
+
+</div></div>
+
+<button class="navbtn" id="prev" aria-label="Previous slide">‹</button>
+<button class="navbtn" id="next" aria-label="Next slide">›</button>
+<div id="bar"></div><div id="count"></div><div id="hint">← → to move · F for full screen</div>
+
+<script>
+(function(){
+  var FIG='https://cdn.hpwren.ucsd.edu/HPWREN-FIgLib-Data/20200905_ValleyFire_lp-n-mobo-c/';
+  var CCT='https://storage.googleapis.com/public-datasets-lila/caltech-unzipped/cct_images/';
+
+  // zoomed crops of the smoke region (smoke column sits at about x=87%, y=43% of the frame)
+  [].forEach.call(document.querySelectorAll('.crop[data-f]'),function(el){
+    el.style.backgroundImage='url("'+FIG+el.getAttribute('data-f')+'")';
+    el.style.backgroundSize='400% auto';
+    el.style.backgroundPosition='100% 40%';
+  });
+
+  // filmstrip of real frames
+  var frames=[['1599341101_-00120.jpg','−2 min','before'],['1599341221_%2B00000.jpg','0','smoke first visible (look closely)'],['1599341341_%2B00120.jpg','+2 min','alarm here: small fire'],['1599341521_%2B00300.jpg','+5 min',''],['1599341821_%2B00600.jpg','+10 min','alarm here: much harder'],['1599343021_%2B01800.jpg','+30 min','']];
+  var strip=document.getElementById('strip');
+  frames.forEach(function(f,i){
+    var good=i===2, bad=i===4;
+    var w=document.createElement('div'); w.className='fadeup d'+Math.min(6,i+1); w.style.flex='1';
+    w.innerHTML='<div class="crop" style="height:200px;background-image:url(\''+FIG+f[0]+'\');background-size:'+(i===5?'180%':'400%')+' auto;background-position:'+(i===5?'88% 40%':'100% 40%')+';'+(good?'outline:4px solid #087f89;outline-offset:2px':bad?'outline:4px solid #ba5935;outline-offset:2px':'')+'"></div>'+
+      '<p class="cap" style="font-size:22px">'+f[1]+'</p><p class="capsub" style="'+(good?'color:#087f89;font-weight:700':bad?'color:#ba5935;font-weight:700':'')+'">'+f[2]+'</p>';
+    strip.appendChild(w);
+  });
+
+  // long-tail bars: real bounding-box counts from Caltech Camera Traps
+  var counts=[['opossum',12134],['raccoon',7908],['coyote',6505],['deer',6428],['rabbit',6025],['bobcat',5048],['cat',4391],['bird',4026],['dog',2860],['squirrel',2648],['rodent',1842],['skunk',1198],['fox',1099],['lizard',177],['mountain lion',44],['badger',28]];
+  var tail=document.getElementById('tail'), mx=counts[0][1];
+  counts.forEach(function(c,i){
+    var rare=c[1]<200;
+    var d=document.createElement('div'); d.className='bar'+(rare?' rare':'');
+    d.innerHTML='<span>'+c[0]+'</span><div><div class="t" style="width:'+Math.max(0.6,c[1]/mx*100)+'%;animation-delay:'+(i*0.04)+'s"></div></div><span class="v">'+c[1].toLocaleString('en-US')+'</span>';
+    tail.appendChild(d);
+  });
+
+  // thumbnails from eight different cameras
+  var th=[['coyote','58ede298-23d2-11e8-a6a3-ec086b02610b.jpg'],['bobcat','59fe21d7-23d2-11e8-a6a3-ec086b02610b.jpg'],['deer','597cd4bb-23d2-11e8-a6a3-ec086b02610b.jpg'],['raccoon','59a7bcd3-23d2-11e8-a6a3-ec086b02610b.jpg'],['rabbit','59fae3af-23d2-11e8-a6a3-ec086b02610b.jpg'],['fox','59e2a3a9-23d2-11e8-a6a3-ec086b02610b.jpg'],['skunk','5976a322-23d2-11e8-a6a3-ec086b02610b.jpg'],['squirrel','59c179db-23d2-11e8-a6a3-ec086b02610b.jpg']];
+  var tg=document.getElementById('thumbs');
+  th.forEach(function(t,i){
+    var d=document.createElement('div'); d.className='ph fadeup d'+Math.min(5,1+(i>>1)); d.style.height='150px';
+    d.innerHTML='<img src="'+CCT+t[1]+'" alt="'+t[0]+'"><span class="credit" style="left:8px;right:auto;bottom:6px">'+t[0]+'</span>';
+    tg.appendChild(d);
+  });
+
+  // deck mechanics
+  var deck=document.getElementById('deck'), slides=[].slice.call(document.querySelectorAll('.slide'));
+  var bar=document.getElementById('bar'), count=document.getElementById('count'), cur=0;
+  function fit(){ var s=Math.min(window.innerWidth/1280, window.innerHeight/720); deck.style.transform='scale('+s+')'; }
+  function show(i){
+    i=Math.max(0,Math.min(slides.length-1,i));
+    slides[cur].classList.remove('on');
+    var el=slides[i]; el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
+    cur=i; bar.style.width=((i+1)/slides.length*100)+'%'; count.textContent=(i+1)+' / '+slides.length;
+    if(location.hash!=='#'+(i+1)) history.replaceState(null,'','#'+(i+1));
+  }
+  window.addEventListener('resize',fit); fit();
+  document.addEventListener('keydown',function(e){
+    if(['ArrowRight','PageDown',' ','Enter'].indexOf(e.key)>=0){e.preventDefault();show(cur+1)}
+    else if(['ArrowLeft','PageUp','Backspace'].indexOf(e.key)>=0){e.preventDefault();show(cur-1)}
+    else if(e.key==='Home'){show(0)} else if(e.key==='End'){show(slides.length-1)}
+    else if(e.key==='f'||e.key==='F'){ if(!document.fullscreenElement){document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen()} else {document.exitFullscreen()} }
+  });
+  document.getElementById('next').onclick=function(){show(cur+1)};
+  document.getElementById('prev').onclick=function(){show(cur-1)};
+  var tx=null;
+  document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});
+  document.addEventListener('touchend',function(e){ if(tx===null)return; var dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>40) show(cur+(dx<0?1:-1)); tx=null; });
+  var start=parseInt((location.hash||'').slice(1),10);
+  slides[0].classList.add('on'); show(isNaN(start)?0:start-1);
+  setTimeout(function(){document.getElementById('hint').style.opacity=0},5000);
+})();
+</script>
+</body>
+</html>

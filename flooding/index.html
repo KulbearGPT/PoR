@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Course materials for Teaching Computers to See: two introductory AI and computer vision slide sessions and two illustrated readings.">
+  <meta name="theme-color" content="#f8f8f3">
+  <title>Teaching Computers to See · AI Intro</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="assets/home.css">
+  <script>
+    // Preserve previously shared links to slides at the site root.
+    if (/^#s(?:[1-9]|[12]\d|3[01])$/.test(location.hash)) {
+      location.replace('slides.html' + location.hash);
+    }
+  </script>
+<style id="unified-tokens">
+:root{--paper:#fbfaf7;--ink:#20383f;--muted:#587078;--teal:#087f89;--line:#d7dfd8;--orange:#ba5935;
+--sans:"Inter","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;--serif:var(--sans);--mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink)}
+</style><style id="unified-home">
+.site-header{height:auto;padding:16px 0}.brand{color:var(--teal);font-size:14px}.brand>span{color:var(--teal)}
+.eyebrow{font:700 12px/1.6 var(--sans);letter-spacing:1.8px}
+h1{font-weight:700;letter-spacing:-.5px}.description{font-size:19px;line-height:1.6}.course-note{font-size:13px}
+.section-heading>span,.item-copy p,.section-note,.reading-note{font-size:13px}.item-label{font:700 11px/1.5 var(--sans);letter-spacing:1.2px}
+h3{font-weight:700}.item-duration,.item-number{font-size:12px}footer{font-size:12px}
+</style></head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="page">
+    <header class="site-header">
+      <a class="brand" href="./" aria-label="AI Intro home">AI <span>/</span> INTRO</a>
+      <nav aria-label="Main navigation"><a href="#slides">Slides</a><a href="#readings">Readings</a></nav>
+    </header>
+
+    <main id="main">
+      <header class="intro">
+        <p class="eyebrow">INTRODUCTION TO AI &amp; COMPUTER VISION</p>
+        <h1>Teaching Computers to See</h1>
+        <p class="description">From pictures and pixels to learning, visual representations, and computer vision projects.</p>
+        <p class="course-note">A visual introduction for high school students · No coding required</p>
+      </header>
+
+      <section id="project" aria-labelledby="project-title">
+        <div class="section-heading"><h2 id="project-title">Your project</h2><span>Flooding · seeing floods in cities from space</span></div>
+        <a class="material-row" href="kickoff/">
+          <span class="item-number" aria-hidden="true">01</span>
+          <div class="item-copy"><span class="item-label">KICKOFF</span><h3>Seeing floods in cities from space</h3><p>What the project can do, where we want to push it, and what the data looks like.</p></div>
+          <span class="item-duration">20 min</span><span class="item-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="material-row" href="projects/">
+          <span class="item-number" aria-hidden="true">02</span>
+          <div class="item-copy"><span class="item-label">BACKGROUND</span><h3>The three project directions</h3><p>The options we compared before choosing flood mapping.</p></div>
+          <span class="item-duration">10 min</span><span class="item-arrow" aria-hidden="true">↗</span>
+        </a>
+      </section>
+
+      <section id="slides" aria-labelledby="slides-title">
+        <div class="section-heading"><h2 id="slides-title">Slides</h2><span>2 sessions · 31 slides</span></div>
+        <a class="material-row" href="slides.html#s1">
+          <span class="item-number" aria-hidden="true">01</span>
+          <div class="item-copy"><span class="item-label">SESSION 1</span><h3>Can computers see?</h3><p>Pixels, examples, neural networks, and the learning loop.</p></div>
+          <span class="item-duration">30 min</span><span class="item-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="material-row" href="slides.html#s16">
+          <span class="item-number" aria-hidden="true">02</span>
+          <div class="item-copy"><span class="item-label">SESSION 2</span><h3>Can we trust what AI sees?</h3><p>Shortcuts, fair experiments, evaluation, and research questions.</p></div>
+          <span class="item-duration">30 min</span><span class="item-arrow" aria-hidden="true">↗</span>
+        </a>
+        <p class="section-note"><a href="slides.html">Open the full slide deck <span aria-hidden="true">→</span></a><span>Use ← → to navigate.</span></p>
+      </section>
+
+      <section id="readings" aria-labelledby="readings-title">
+        <div class="section-heading"><h2 id="readings-title">Readings</h2><span>Read in order, after the slides</span></div>
+        <a class="material-row" href="reading-01-visual-representations.html">
+          <span class="item-number" aria-hidden="true">01</span>
+          <div class="item-copy"><span class="item-label">VISUAL REPRESENTATIONS</span><h3>What makes two pictures look alike?</h3><p>Features, image similarity, and transfer learning through a shoe search.</p></div>
+          <span class="item-duration">35–45 min</span><span class="item-arrow" aria-hidden="true">↗</span>
+        </a>
+        <a class="material-row" href="reading-02-visual-tasks.html">
+          <span class="item-number" aria-hidden="true">02</span>
+          <div class="item-copy"><span class="item-label">VISUAL TASKS</span><h3>Find it, count it, outline it.</h3><p>Detection, segmentation, annotation, and evaluating useful answers.</p></div>
+          <span class="item-duration">35–45 min</span><span class="item-arrow" aria-hidden="true">↗</span>
+        </a>
+        <p class="reading-note">Take your time with the figures and questions. Each reading builds on the slides.</p>
+      </section>
+    </main>
+
+    <footer><span>AI Intro · Teaching Computers to See</span></footer>
+  </div>
+</body>
+</html>
